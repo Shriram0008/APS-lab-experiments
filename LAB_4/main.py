@@ -1,148 +1,161 @@
-from data import (
-    load_data,
-    create_train_test_data,
-    get_class_distribution
-)
-
-from visual import plot_class_distribution
-
-from task1 import (
-    train_model,
-    get_probabilities,
-    create_probability_results,
-    apply_threshold,
-    compare_thresholds
-)
-
-from task2 import (
-    confusion_matrices,
-    calculate_specificity,
-    calculate_all_metrics,
-    sklearn_verification
-)
+from data import DataLoader
+from preprocessing import DataPreprocessor
+from training import ModelTraining
+from prediction import ModelPrediction
+from evaluation import ModelEvaluation
+from visualization import DataVisualization
 
 
-def main():
+class APSLab4:
 
-    print("========================================")
-    print("          APS LAB - 4")
-    print("   Understanding Probability in")
-    print("       Binary Classification")
-    print("========================================")
+    def run(self):
 
-    # ------------------------------------
-    # 1. Load Dataset
-    # ------------------------------------
+        print("======================================")
+        print("             APS LAB - 4")
+        print("       Binary Classification")
+        print("======================================")
 
-    X, y, data = load_data()
 
-    # ------------------------------------
-    # 2. Class Distribution
-    # ------------------------------------
+        # ==================================
+        # 1. LOAD DATA
+        # ==================================
 
-    class_distribution = get_class_distribution(
-        y,
-        data
-    )
+        data_loader = DataLoader()
 
-    # ------------------------------------
-    # 3. Visualization
-    # ------------------------------------
+        X, y, data = (
+            data_loader.load_data()
+        )
 
-    plot_class_distribution(
-        class_distribution
-    )
 
-    # ------------------------------------
-    # 4. Train/Test Split
-    # ------------------------------------
+        # ==================================
+        # 2. PREPROCESSING
+        # ==================================
 
-    X_train, X_test, y_train, y_test = (
-        create_train_test_data(X, y)
-    )
+        preprocessor = DataPreprocessor()
 
-    # ------------------------------------
-    # 5. Train Logistic Regression
-    # ------------------------------------
+        class_distribution = (
+            preprocessor.show_class_distribution(
+                y,
+                data
+            )
+        )
 
-    model = train_model(
-        X_train,
-        y_train
-    )
+        (
+            X_train,
+            X_test,
+            y_train,
+            y_test
+        ) = preprocessor.split_data(
+            X,
+            y
+        )
 
-    # ------------------------------------
-    # 6. Obtain Probabilities
-    # ------------------------------------
 
-    probabilities = get_probabilities(
-        model,
-        X_test
-    )
+        # ==================================
+        # 3. VISUALIZATION
+        # ==================================
 
-    # ------------------------------------
-    # 7. Create Probability Results
-    # ------------------------------------
+        visualization = DataVisualization()
 
-    results = create_probability_results(
-        y_test,
-        probabilities
-    )
+        visualization.plot_class_distribution(
+            class_distribution
+        )
 
-    # ------------------------------------
-    # 8. Apply Threshold
-    # ------------------------------------
 
-    results = apply_threshold(
-        results,
-        threshold=0.50
-    )
+        # ==================================
+        # 4. MODEL TRAINING
+        # ==================================
 
-    # ------------------------------------
-    # 9. Compare Thresholds
-    # ------------------------------------
+        training = ModelTraining()
 
-    compare_thresholds(results)
+        model = (
+            training.create_model()
+        )
 
-    # ------------------------------------
-    # 10. Confusion Matrices
-    # ------------------------------------
+        model = (
+            training.train_model(
+                model,
+                X_train,
+                y_train
+            )
+        )
 
-    confusion_matrices(
-        y_test,
-        probabilities
-    )
 
-    # ------------------------------------
-    # 11. Specificity
-    # ------------------------------------
+        # ==================================
+        # 5. PREDICTION
+        # ==================================
 
-    calculate_specificity(
-        y_test,
-        probabilities
-    )
+        prediction = ModelPrediction()
 
-    # ------------------------------------
-    # 12. Compare All Metrics
-    # ------------------------------------
+        probabilities = (
+            prediction.get_probabilities(
+                model,
+                X_test
+            )
+        )
 
-    calculate_all_metrics(
-        y_test,
-        probabilities
-    )
+        prediction.check_probability_sum(
+            probabilities
+        )
 
-    # ------------------------------------
-    # 13. Verify using Sklearn
-    # ------------------------------------
+        results = (
+            prediction.create_results_table(
+                y_test,
+                probabilities
+            )
+        )
 
-    sklearn_verification(
-        y_test,
-        results
-    )
+        results = (
+            prediction.add_actual_labels(
+                results
+            )
+        )
 
-    print("\n========================================")
-    print("          LAB-4 COMPLETED")
-    print("========================================")
+        results = (
+            prediction.apply_threshold(
+                results,
+                threshold=0.50
+            )
+        )
+
+        prediction.compare_thresholds(
+            results
+        )
+
+
+        # ==================================
+        # 6. EVALUATION
+        # ==================================
+
+        evaluation = ModelEvaluation()
+
+        final_table = (
+            evaluation.show_final_table(
+                y_test,
+                probabilities
+            )
+        )
+
+
+        # ==================================
+        # COMPLETE
+        # ==================================
+
+        print(
+            "\n======================================"
+        )
+
+        print(
+            "           LAB-4 COMPLETED"
+        )
+
+        print(
+            "======================================"
+        )
 
 
 if __name__ == "__main__":
-    main()
+
+    lab = APSLab4()
+
+    lab.run()
