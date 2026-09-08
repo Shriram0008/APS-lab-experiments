@@ -1,8 +1,6 @@
 import pandas as pd
 
-
 class ModelPrediction:
-
     def get_probabilities(
         self,
         model,
@@ -23,7 +21,6 @@ class ModelPrediction:
 
         return probabilities
 
-
     def check_probability_sum(
         self,
         probabilities
@@ -37,7 +34,6 @@ class ModelPrediction:
             probabilities[:5]
             .sum(axis=1)
         )
-
 
     def create_results_table(
         self,
@@ -67,7 +63,6 @@ class ModelPrediction:
 
         return results
 
-
     def add_actual_labels(
         self,
         results
@@ -96,7 +91,6 @@ class ModelPrediction:
         )
 
         return results
-
 
     def apply_threshold(
         self,
@@ -134,7 +128,6 @@ class ModelPrediction:
         )
 
         return results
-
 
     def compare_thresholds(
         self,

@@ -1,8 +1,6 @@
 import matplotlib.pyplot as plt
 
-
 class DataVisualization:
-
     def plot_class_distribution(
         self,
         class_distribution

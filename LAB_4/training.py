@@ -2,9 +2,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
-
 class ModelTraining:
-
     def create_model(self):
 
         model = make_pipeline(
@@ -15,7 +13,6 @@ class ModelTraining:
         )
 
         return model
-
 
     def train_model(
         self,
